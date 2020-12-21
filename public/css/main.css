@@ -105,8 +105,8 @@ form [type="button"] {
 }
 
 .control-wrapper > label {
-  width: 120px;
   flex-grow: 0;
+  padding: 1rem;
 }
 
 .control-wrapper > input {

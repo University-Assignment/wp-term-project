@@ -1,0 +1,22 @@
+{% extends 'layout.html' %} {% block content %}
+<form>
+  <div class="control-wrapper">
+    <label for="title">제목</label>
+    <input readonly type="text" id="title" name="title" value="{{ post.title }}" />
+  </div>
+  <div class="control-wrapper">
+    <label for="author">작성자</label>
+    <input readonly type="text" id="author" name="author" value="{{ post.author.name }}" />
+  </div>
+  <div class="control-wrapper">
+    <label for="createdAt">작성일</label>
+    <input readonly type="text" id="createdAt" name="createdAt" value="{{ post.createdAt }}" />
+    <label for="views">조회수</label>
+    <input readonly type="text" id="views" name="views" value="{{ post.views }}" />
+  </div>
+  <div class="control-wrapper">
+    <label for="content">내용</label>
+    <textarea readonly rows="20" cols="100" id="content" name="content" />{{ post.content }}</textarea>
+  </div>
+</form>
+{% endblock %}

@@ -23,7 +23,9 @@
       <tbody>
         {% for post in posts %}
         <tr>
-          <td style="text-align: center">{{post.title}}</td>
+          <td style="text-align: center">
+            <a href="/post/{{post._id}}">{{post.title}}</a>
+          </td>
           <td style="text-align: center">{{post.views}}</td>
           <td style="text-align: center">{{post.author.name}}</td>
           <td style="text-align: center">{{ post.createdAt }}</td>
@@ -33,7 +35,7 @@
     </table>
   </main>
   <footer>
-    <button onclick="location.href='/post'" style="padding: 0.1em 0.6em">
+    <button onclick="location.href='/newpost'" style="padding: 0.1em 0.6em">
       글쓰기
     </button>
   </footer>
