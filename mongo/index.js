@@ -23,5 +23,6 @@ const models = {};
 
 models.User = require("./user.model");
 models.Post = require("./post.model");
+models.Good = require("./good.model");
 
 module.exports = { connect, mongoose, models };

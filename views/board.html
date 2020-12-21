@@ -4,19 +4,21 @@
     <h1 class="title" style="padding-bottom: 1rem">자유게시판</h1>
   </header>
   <main>
-    <table frame="void" width="250px" class="board-table">
+    <table frame="void" width="300px" class="board-table">
       <colgroup>
         <col width="100px" />
+        <col width="50px" />
         <col width="50px" />
         <col width="50px" />
         <col width="50px" />
       </colgroup>
       <thead>
         <tr>
-          <th scope="col">Title</th>
-          <th scope="col">Views</th>
-          <th scope="col">Author</th>
-          <th scope="col">Date</th>
+          <th scope="col">제목</th>
+          <th scope="col">작성자</th>
+          <th scope="col">조회수</th>
+          <th scope="col">좋아요</th>
+          <th scope="col">작성일</th>
         </tr>
       </thead>
 
@@ -26,8 +28,9 @@
           <td style="text-align: center">
             <a href="/post/{{post._id}}">{{post.title}}</a>
           </td>
-          <td style="text-align: center">{{post.views}}</td>
           <td style="text-align: center">{{post.author.name}}</td>
+          <td style="text-align: center">{{post.views}}</td>
+          <td style="text-align: center">{{post.goodCount}}</td>
           <td style="text-align: center">{{ post.createdAt }}</td>
         </tr>
         {% endfor %}

@@ -1,20 +1,29 @@
 {% extends 'layout.html' %} {% block content %}
-<form>
+<form style="margin-bottom: 3rem">
   <div class="control-wrapper">
     <label for="title" style="padding-right: 2rem;"">제목 </label>
     <input readonly type="text" id="title" name="title" value="{{ post.title }}" />
   </div>
   <div class="control-wrapper">
     <label for="author">작성자</label>
-    <input readonly type="text" id="author" name="author" value="{{ post.name }}" style="width:3rem" />
+    <input readonly type="text" id="author" name="author" value="{{ post.name }}" style="width:2rem" />
     <label for="createdAt">작성일</label>
     <input readonly type="text" id="createdAt" name="createdAt" value="{{ post.createdAt_ }}" style="width:7rem" />
     <label for="views">조회수</label>
-    <input readonly type="text" id="views" name="views" value="{{ post.views }}" style="width:3rem"/>
+    <input readonly type="text" id="views" name="views" value="{{ post.views }}" style="width:.3rem"/>
+    <label for="views">좋아요</label>
+    <input readonly type="text" id="good" name="good" value="{{ post.goodCount }}" style="width:.3rem"/>
+    {% if post.goodCount > 0 %}
+    <input type="button" class="good"  onclick="location.href='/good/{{ post._id }}'" value="좋아요" style="background-color: red" />
+    {% else %}
+    <input type="button" class="good" onclick="location.href='/good/{{ post._id }}'" value="좋아요" />
+    {% endif %}
   </div> 
+  <div id="error-message-post" class="error">{{errorMessage}}</div>
   <div class="control-wrapper">
     <label for="content">내용</label>
     <textarea readonly rows="20" cols="100" id="content" name="content" />{{ post.content }}</textarea>
   </div>
 </form>
+
 {% endblock %}

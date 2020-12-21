@@ -15,7 +15,7 @@ router.post("/join", async (req, res, next) => {
   }
 
   await User.create({ name, username, password, email });
-  res.redirect("/login");
+  res.redirect("/");
 });
 
 router.post("/login", async (req, res, next) => {
@@ -25,10 +25,10 @@ router.post("/login", async (req, res, next) => {
 
   if (!user) {
     req.flash("errorMessage", "등록되지 않은 아이디입니다.");
-    return res.redirect("/login");
+    return res.redirect("/");
   } else if (!user.authenticate(password)) {
     req.flash("errorMessage", "잘못된 비밀번호입니다.");
-    return res.redirect("/login");
+    return res.redirect("/");
   }
   req.session.isAuthenticated = true;
   req.session.user = { id: user._id, name: user.name, username };

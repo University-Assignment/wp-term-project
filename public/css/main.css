@@ -93,7 +93,7 @@ form {
 }
 
 form [type="submit"],
-form [type="button"] {
+.login-form [type="button"] {
   display: block;
   width: 100%;
   padding: 0.5em 1em;
@@ -182,4 +182,24 @@ form [type="button"] {
   grid-column-end: 10;
   grid-row-start: 4;
   grid-row-end: 5;
+}
+
+.good {
+  margin: 0 0.5rem;
+  border: 0;
+  border-radius: 1rem;
+}
+
+.index {
+  display: grid;
+  grid-template-columns: repeat(5, 0.2fr);
+  grid-template-rows: 0.5fr 0.5fr;
+  height: 100%;
+}
+
+.index board {
+  grid-column-start: 2;
+  grid-column-end: 6;
+  grid-row-start: 1;
+  grid-row-end: 2;
 }
