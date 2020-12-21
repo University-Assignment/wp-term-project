@@ -59,12 +59,6 @@ router.get("/board", async (req, res, next) => {
   });
 });
 
-router.get("/myinfo", requireAuthentication, (req, res, next) => {
-  res.render("myinfo", {
-    title: "Simple Board",
-  });
-});
-
 router.get("/newpost", requireAuthentication, (req, res, next) => {
   res.render("post-new", {
     title: "Simple Board",
@@ -72,39 +66,30 @@ router.get("/newpost", requireAuthentication, (req, res, next) => {
 });
 
 router.get("/post/:id", requireAuthentication, async (req, res, next) => {
-  const post = await Post.aggregate([
-    {
-      $match: {
-        _id: new mongoose.Types.ObjectId(req.params.id),
-      },
-    },
-    {
-      $lookup: {
-        from: "accounts",
-        localField: "author",
-        foreignField: "_id",
-        as: "author",
-      },
-    },
-    { $unwind: "$author" },
-    { $sort: { createdAt: -1 } },
-    {
-      $project: {
-        title: 1,
-        author: {
-          name: 1,
-        },
-        views: 1,
-        content: 1,
-        createdAt: {
-          $dateToString: { format: "%Y-%m-%d", date: "$createdAt" },
-        },
-      },
-    },
-  ]).exec();
+  const post = await Post.findOne({ _id: req.params.id });
+  if (!post) res.redirect("/");
+  if (post.author != req.session.user.id) {
+    post.views++;
+    post.save();
+  }
+  const user = await User.findOne({ _id: post.author });
+  if (!user) res.redirect("/");
+  post.name = user.name;
+  post.createdAt_ = new Date(post.createdAt)
+    .toISOString()
+    .replace(/T/, " ")
+    .replace(/\..+/, "");
   res.render("post", {
     title: "Simple Board",
-    post: post[0],
+    post: post,
+  });
+});
+
+router.get("/myinfo", requireAuthentication, async (req, res, next) => {
+  const account = await User.findOne({ _id: req.session.user.id });
+  res.render("myinfo", {
+    title: "Simple Board",
+    account,
   });
 });
 

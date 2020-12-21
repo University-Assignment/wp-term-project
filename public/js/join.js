@@ -1,23 +1,23 @@
-const form = document.querySelector("form");
-const errorMessageElement = document.querySelector("#error-message");
+const joinForm = document.querySelector(".join-form");
+const joinError = document.querySelector("#error-message-join");
 
-form.onsubmit = () => {
+joinForm.onsubmit = () => {
   let errorMessage = "";
-  errorMessageElement.innerHTML = "";
+  joinError.innerHTML = "";
 
-  if (!form.name.value) {
+  if (!joinForm.name.value) {
     errorMessage = "이름을 입력해주세요.";
-  } else if (!form.username.value) {
+  } else if (!joinForm.username.value) {
     errorMessage = "아이디를 입력해주세요.";
-  } else if (!form.password.value) {
+  } else if (!joinForm.password.value) {
     errorMessage = "비밀번호를 입력해주세요.";
-  } else if (form.password.value !== form.passwordConfirm.value) {
+  } else if (joinForm.password.value !== joinForm.passwordConfirm.value) {
     errorMessage = "비밀번호가 일치하지 않습니다.";
-  } else if (!form.email.value) {
+  } else if (!joinForm.email.value) {
     errorMessage = "이메일주소를 입력해주세요.";
   }
 
-  errorMessageElement.innerHTML = errorMessage;
+  joinError.innerHTML = errorMessage;
 
   return !errorMessage;
 };

@@ -1,17 +1,17 @@
-const form = document.querySelector("form");
-const errorMessageElement = document.querySelector("#error-message");
+const loginForm = document.querySelector(".login-form");
+const loginError = document.querySelector("#error-message-login");
 
-form.onsubmit = () => {
+loginForm.onsubmit = () => {
   let errorMessage = "";
-  errorMessageElement.innerHTML = "";
+  loginError.innerHTML = "";
 
-  if (!form.username.value) {
+  if (!loginForm.username.value) {
     errorMessage = "아이디를 입력해주세요.";
-  } else if (!form.password.value) {
+  } else if (!loginForm.password.value) {
     errorMessage = "비밀번호를 입력해주세요.";
   }
 
-  errorMessageElement.innerHTML = errorMessage;
+  loginError.innerHTML = errorMessage;
 
   return !errorMessage;
 };

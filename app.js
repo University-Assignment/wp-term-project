@@ -13,6 +13,7 @@ const MongoStore = require("connect-mongo")(session);
 const { IS_DEV, COOKIE_SECRET } = require("./env");
 const pageRouter = require("./routes/page.router");
 const authRouter = require("./routes/auth.router");
+const funcRouter = require("./routes/func.router");
 
 const app = express();
 
@@ -46,6 +47,7 @@ app.use(authenticated);
 
 app.use(pageRouter);
 app.use(authRouter);
+app.use(funcRouter);
 
 app.use((req, res, next) => {
   next(createError(404));

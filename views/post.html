@@ -6,9 +6,9 @@
   </div>
   <div class="control-wrapper">
     <label for="author">작성자</label>
-    <input readonly type="text" id="author" name="author" value="{{ post.author.name }}" style="width:3rem" />
+    <input readonly type="text" id="author" name="author" value="{{ post.name }}" style="width:3rem" />
     <label for="createdAt">작성일</label>
-    <input readonly type="text" id="createdAt" name="createdAt" value="{{ post.createdAt }}" style="width:7rem" />
+    <input readonly type="text" id="createdAt" name="createdAt" value="{{ post.createdAt_ }}" style="width:7rem" />
     <label for="views">조회수</label>
     <input readonly type="text" id="views" name="views" value="{{ post.views }}" style="width:3rem"/>
   </div> 

@@ -40,16 +40,4 @@ router.get("/logout", (req, res, next) => {
   res.redirect("/");
 });
 
-router.post("/post", async (req, res, next) => {
-  const { title, content } = req.body;
-  const author = req.session.user.id;
-  Post.create({ title, content, author }, function (err, post) {
-    if (err) {
-      console.log(err);
-      return res.redirect("/post");
-    }
-    res.redirect("/board");
-  });
-});
-
 module.exports = router;
