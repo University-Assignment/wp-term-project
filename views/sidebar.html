@@ -1,0 +1,41 @@
+<div class="login">
+  <form class="login-form" method="post" action="/login">
+    {%if isAuthenticated %}
+    <h3 style="padding-bottom: 1rem">{{user.name}}님 환영합니다.</h3>
+    <input type="button" onclick="location.href='/myinfo'" value="내 정보" />
+    <input type="button" onclick="location.href='/logout'" value="로그아웃" />
+    {% else %}
+    <div class="control-wrapper">
+      <input
+        type="text"
+        name="username"
+        maxlength="12"
+        class="form-control"
+        placeholder="아이디"
+        id="username"
+        required
+      />
+    </div>
+    <div class="control-wrapper">
+      <input
+        type="password"
+        name="password"
+        maxlength="12"
+        class="form-control"
+        placeholder="비밀번호"
+        id="password"
+        required
+      />
+    </div>
+    <div id="error-message" class="error">{{errorMessage}}</div>
+    <div class="flex">
+      <button type="submit"><a href="/join">회원가입</a></button>
+      <input id="login" name="login_submit" type="submit" value="로그인" />
+    </div>
+    {% endif %}
+  </form>
+</div>
+
+{% block scripts %}
+<script src="/public/js/login.js"></script>
+{% endblock %}

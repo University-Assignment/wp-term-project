@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="/public/css/main.css" />
+    {% block styles %} {% endblock %}
+  </head>
+  <body class="grid-container">
+    <header>
+      <div class="flex">
+        <h2 class="title">
+          <a href="/">Simple Board</a>
+        </h2>
+        <ul>
+          <li class="item"><a href="/board">자유게시판</a></li>
+        </ul>
+      </div>
+    </header>
+    <sidebar>{% include 'sidebar.html' %}</sidebar>
+    <main class="flex-col">{% block content %} {% endblock %}</main>
+
+    <footer class="flex">
+      <p>Copyright &copy; 2018037010 윤정환</p>
+    </footer>
+
+    {% block scripts %} {% endblock %}
+  </body>
+</html>

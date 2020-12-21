@@ -1,0 +1,16 @@
+{% extends 'layout.html' %} {% block content %}
+<h2 class="title">글쓰기</h2>
+
+<form class="post-form" method="post" action="/post">
+  <div class="control-wrapper">
+    <label for="title">제목</label>
+    <input type="text" id="title" name="title" />
+  </div>
+  <div class="control-wrapper">
+    <label for="content">내용</label>
+    <input type="textarea" id="content" name="content" />
+  </div>
+  <div id="error-message" class="error">{{errorMessage}}</div>
+  <button type="submit">글쓰기</button>
+</form>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'layout.html' %} {% block content %}
+<div class="board">
+  <header>
+    <h1 class="title" style="padding-bottom: 1rem">자유게시판</h1>
+  </header>
+  <main>
+    <table frame="void" width="250px" class="board-table">
+      <colgroup>
+        <col width="100px" />
+        <col width="50px" />
+        <col width="50px" />
+        <col width="50px" />
+      </colgroup>
+      <thead>
+        <tr>
+          <th scope="col">Title</th>
+          <th scope="col">Views</th>
+          <th scope="col">Author</th>
+          <th scope="col">Date</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for post in posts %}
+        <tr>
+          <td style="text-align: center">{{post.title}}</td>
+          <td style="text-align: center">{{post.views}}</td>
+          <td style="text-align: center">{{post.author.name}}</td>
+          <td style="text-align: center">{{ post.createdAt }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </main>
+  <footer>
+    <button onclick="location.href='/post'" style="padding: 0.1em 0.6em">
+      글쓰기
+    </button>
+  </footer>
+</div>
+{% endblock %}
