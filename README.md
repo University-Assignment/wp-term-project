@@ -7,217 +7,203 @@
 <details>
 <summary>목차</summary>
 
-- [과제 주제 설명](#과제-주제-설명)
-- [주요 코드 설명](#주요-코드-설명)
-  - [사용 API](#사용-API)
-  - [전체적인 구조](#header)
+- [프로젝트 설명](#프로젝트-설명)
+- [주요 기능 설명](#주요-기능-설명)
+  - [HTML, CSS](#HTML,-CSS)
+  - [웹 페이지 디자인](#웹-페이지-디자인)
+  - [JavaScript](#JavaScript)
+  - [Node.js(Express)](<#Node.js(Express)>)
+  - [MongoDB](#MongoDB)
+  - [인증](#인증)
+  - [기타](#기타)
 - [비고 및 고찰](#비고-및-고찰)
 
 </details>
 
 <br>
 
-# 과제 주제 설명
+# 프로젝트 설명
 
-9주차에 나온 주소 검색 API를 이용한 예제 업그레이드
+한 학기 동안 배운 내용 및 앞으로 배울 내용들을 활용하여 Term Project 진행
+
+주제는 아래 목록 혹은 자유 주제
+
+- 게시판 만들기
+- Todo 애플리케이션 만들기
+- Blog 만들기
+- 기타 자유 주제
 
 <br>
 
-# 주요 코드 설명
+HTML, CSS, 디자인, JS, Node, DB, 인증, 기타의 7가지를 모두 적용하였습니다.
 
-## 사용 API
+영화 소개 및 순위, 코로나 추세 그래프, 게시판 등의 기능을 담은 웹 페이지를 구현하였습니다.
 
-- 도로명주소 개발자센터 도로명주소 API
-- 카카오 지도 API
+<br>
 
-## 전체적인 구조
+# 주요 기능 설명
 
-```html
-<div class="grid-container">...</div>
-```
+## HTML, CSS
 
-```css
-.grid-container {
-  display: grid;
-  grid-template-areas:
-    "header"
-    "main"
-    "footer";
-  grid-template-columns: 1fr;
-  grid-template-rows: 5rem 1fr 5rem;
-  height: 100%;
-}
-```
+- 메인, 회원가입, 내 정보 수정, 글 쓰기, 게시판, 게시판 상세, 영화 상세 등의 페이지들로 구성되어 있습니다.
+- CSS는 되도록 효과에 맞는 이름으로(.효과이름) 지어서 class에 넣어 재사용하기 용이하게 하였습니다.
 
-- grid-container를 통해 header, main, footer를 감싸주었고, grid를 사용해 전체적인 레이아웃을 구성하였다.
+<br>
 
-## 검색어 필터링
+## 웹 페이지 디자인
+
+- 전체적인 레이아웃은 grid를 사용해서 잡아주었고 내부는 flex를 사용해 틀을 잡아주었습니다.
+- 회색, 흰색을 조합하였고 차분하면서 심플한 디자인으로 제작하였습니다.
+
+![](images/grid1.png)
+![](images/grid2.png)
+
+<br>
+
+## JavaScript
+
+자바스크립트는 크게 2가지에 사용하였습니다.
+
+### 1) 글 쓰기, 회원가입, 로그인할 때 입력한 정보가 적절한지 확인
+
+- 각각의 form에 submit 이벤트를 등록하여 제출시, 입력 항목이 비어있거나 조건에 맞지 않는 값이 들어있을 경우 진행을 멈춥니다.
+
+<br>
+
+### 2) 코로나 추세 JSON 데이터을 API에 요청하여 받아와 그래프를 그려주기
 
 ```js
-function checkSearchedWord(obj) {
-  if (obj.value.length > 0) {
-    var expText = /[%=><]/;
-    if (expText.test(obj.value) == true) {
-      alert("특수문자를 입력 할수 없습니다.");
-      obj.value = obj.value.split(expText).join("");
-      return false;
-    }
+async function request() { // 코로나 추세 json 요청
+  const response = await fetch("/graph", {
+    method: "GET",
+  });
+  return response.json();
+}
 
-    var sqlArray = new Array(
-      "OR",
-      "SELECT",
-      "INSERT",
-      "DELETE",
-      "UPDATE",
-      "CREATE",
-      "DROP",
-      "EXEC",
-      "UNION",
-      "FETCH",
-      "DECLARE",
-      "TRUNCATE"
-    );
-
-    var regex;
-    for (var i = 0; i < sqlArray.length; i++) {
-      regex = new RegExp(sqlArray[i], "gi");
-
-      if (regex.test(obj.value)) {
-        alert(
-          '"' + sqlArray[i] + '"와(과) 같은 특정문자로 검색할 수 없습니다.'
-        );
-        obj.value = obj.value.replace(regex, "");
-        return false;
-      }
-    }
+async function drawChart() { // json 데이터를 배열에 넣고 그래프 그리기
+  const result = await request();
+  let resultArray = [];
+  resultArray.push(["Period", "Ratio"]);
+  for (let i in result.data) {
+    resultArray.push([
+      result.data[i].period.substring(5, 10),
+      result.data[i].ratio,
+    ]);
   }
-  return true;
+
+  ...
+
 }
+
 ```
 
-- 문제를 일으킬 수 있는 특수 문자 및 지시어들을 필터링 해주었다.
+<br>
 
-## 페이지네이션
+## Node.js(Express)
 
-![](img/페이지네이션.png)
+![](images/node.png)
+
+### 1) env 디렉터리
+
+- 환경 변수 제공을 위한 코드 작성
+
+### 2) middlewares 디렉터리
+
+- Express에서 핵심이라고 할 수 있는 미들웨어 코드 작성
+
+### 3) mongo 디렉터리
+
+- MongoDB 연결 코드과 스키마 및 모델 생성 코드 작성
+
+### 4) public 디렉터리
+
+- 사용할 정적 리소스를 담아두는 디렉터리
+
+### 5) routes 디렉터리
+
+- 라우팅을 위한 코드 작성
+
+### 6) views 디렉터리
+
+- 렌더링할 템플릿 파일을 담아두는 디렉터리
+
+### 7) .env
+
+- 환경 변수 설정 파일
+
+### 8) app.js
+
+- Express Application 객체 설정
+
+### 9) index.js
+
+- Entry Point
+
+<br>
+
+## MongoDB
+
+### 1. good.model.js (좋아요 정보) -> accId(회원 uniqueID), postId(게시글 계정 uniqueID)
+
+### 2. post.model.js (게시글 정보) -> title(제목), content(내용), author(회원 uniqueID), views(조회수), createdAt(작성일)
+
+### 3. user.model.js (회원 정보) -> name(이름), username(아이디), hashedPassword(암호화된 비밀번호), email(이메일)
+
+<br>
+
+## 인증
+
+- 세션 기반의 로그인 인증을 구현하였습니다.
+- 세션을 메모리에 저장하면 메무리 부족으로 문제가 발생하기 때문에 MongDB를 세션 스토어로 사용하였습니다.
 
 ```js
-function pageMake(jsonStr) {
-  var total = jsonStr.common.totalCount;
-  var pageNum = form.currentPage.value;
-  var paggingStr = "<nav>";
-  paggingStr += "<ul class='pagination'>";
-  if (total > 0) {
-    var PAGEBLOCK = 5;
-    var pageSize = 5;
-    var totalPages = Math.floor((total - 1) / pageSize) + 1;
-    var firstPage = Math.floor((pageNum - 1) / PAGEBLOCK) * PAGEBLOCK + 1;
-    if (firstPage <= 0) firstPage = 1;
-    var lastPage = firstPage - 1 + PAGEBLOCK;
-    if (lastPage > totalPages) lastPage = totalPages;
-    var nextPage = lastPage + 1;
-    var prePage = firstPage - 5;
-    if (firstPage > PAGEBLOCK) {
-      paggingStr +=
-        "<li class='page-item'><a class='page-link' href='javascript:goPage(" +
-        prePage +
-        ");'>◁</a></li>";
-    }
-    for (i = firstPage; i <= lastPage; i++) {
-      if (pageNum == i)
-        paggingStr +=
-          "<li class='page-item active' aria-current='page'><a class='page-link' href='javascript:goPage(" +
-          i +
-          ");'>" +
-          i +
-          "<span class='sr-only'>(current)</span></a></li>";
-      else
-        paggingStr +=
-          "<li class='page-item'><a class='page-link' href='javascript:goPage(" +
-          i +
-          ");'>" +
-          i +
-          "</a></li>";
-    }
-    if (lastPage < totalPages) {
-      paggingStr +=
-        "<li class='page-item'><a class='page-link' href='javascript:goPage(" +
-        nextPage +
-        ");'>▷</a></li>";
-    }
-    paggingStr += "</ul>";
-    paggingStr += "</nav>";
-    document.querySelector("#pageApi").innerHTML = paggingStr;
+req.session.isAuthenticated = true;
+req.session.user = { id: user._id, name: user.name, username };
+```
+
+- 위와 같이 로그인을 하면 세션에서 isAuthenticated, user 변수에 데이터를 넣어놓고, 아래와 같이 페이지 이동 전에 인증을 거친다.
+
+```js
+exports.requireAuthentication = (req, res, next) => {
+  if (req.session.isAuthenticated) {
+    next();
+  } else {
+    req.flash("errorMessage", "로그인 후에 사용해주세요.");
+    res.redirect("/login");
   }
-}
+};
 ```
 
-- form에 hidden인 currentPage를 통해 현재 페이지 번호를 저장하였고, goPage(page) 함수를 통해 페이지 이동을 시켰다.
+<br>
 
-## 지도
+## 기타
 
-![](img/지도.png)
+### 1. 도전 과제(게시판 기능)을 구현하였습니다.
 
-- 검색한 위치 근처에 존재하는 편의 시설을 검색해 볼 수 있다.
+- 도전 과제에 추가로 페이지네이션과 좋아요, 조회수 기능을 구현하였습니다.
 
-```html
-<a
-  href='map.html?bdNm=${encodeURIComponent(item.bdNm)}&roadAddr=${encodeURIComponent(item.roadAddr)}&jibunAddr=${encodeURIComponent(item.siNm + " " + item.sggNm + " " + item.emdNm + " " + item.lnbrMnnm)}&zipNo=${encodeURIComponent(item.zipNo)}'
-></a>
-```
+![](images/board.png)
+![](images/post.png)
 
-- 주소에 get방식으로 정보를 넣어 보내주었다.
+<br>
 
-```js
-function getParam(sname) {
-  var params = location.search.substr(location.search.indexOf("?") + 1);
-  var sval = "";
-  params = params.split("&");
-  for (var i = 0; i < params.length; i++) {
-    temp = params[i].split("=");
-    if ([temp[0]] == sname) {
-      sval = temp[1];
-    }
-  }
-  return sval;
-}
-```
+### 2. 코로나 추세 그래프를 구현 하였습니다.
 
-- getParam 함수로 get방식으로 받은 파라미터를 name으로 value를 읽어온다
+- 서버에서 네이버 데이터랩 api를 통해 날짜별 검색율을 받아와 프론트에서 구글의 그래프 api를 사용해 그래프를 그려주었습니다.
 
-```js
-var content =
-  '<div class="wrap">' +
-  '    <div class="info">' +
-  '        <div class="title">' +
-  `            ${bdNm}` +
-  '            <div class="close" onclick="closeOverlay()" title="닫기"></div>' +
-  "        </div>" +
-  '        <div class="body">' +
-  '            <div class="desc">' +
-  `                <div class="ellipsis">${roadAddr}</div>` +
-  `                <div class="jibun ellipsis"> ${jibunAddr} (우) ${zipNo}</div>` +
-  `                <div><a href="https://map.kakao.com/link/search/${encodeURIComponent(
-    roadAddr
-  )}" target="_blank" class="link">카카오맵 이동</a></div>` +
-  "            </div>" +
-  "        </div>" +
-  "    </div>" +
-  "</div>";
-```
+![](images/corona.png)
 
-- 그 후 카카오 지도 API에 도로명을 검색하여 좌표를 찾아 위치를 표시하고 getParam 함수로 읽어온 정보를 커스텀 마커로 표현해준다.
-- 커스텀 마커는 건물 이름, 도로명, 지번 주소, 우편 번호, 카카오맵 이동을 보여준다.
+<br>
 
-## 카카오맵
+### 3. 영화 상세보기와 순위 테이블을 구현하였습니다.
 
-![](img/카카오맵.png)
+- 아래의 api를 사용해 영화의 순위와 상세보기 기능을 구현하였습니다.
 
-- 카카오맵 이동 클릭시 검색한 주소를 카카오맵에서 찾아 보여줌
+1. 영화 진흥 위원회 API
+2. 네이버 검색 API
 
-![](img/카카오맵2.png)
-
-- 편의 시설 마커의 상단을 클릭시 카카오맵에서 해당 정보를 보여줌
+![](images/movieRanking.png)
+![](images/movie.png)
 
 <br>
 
