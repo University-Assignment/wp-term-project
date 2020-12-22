@@ -1,5 +1,7 @@
 const { Router } = require("express");
 const { requireAuthentication } = require("../middlewares/auth");
+const { CLIENT_ID2, CLIENT_SECRET2 } = require("../env");
+const axios = require("axios");
 
 const router = Router();
 
@@ -53,6 +55,49 @@ router.get("/good/:id", requireAuthentication, async (req, res, next) => {
   }
 
   return res.redirect("/post/" + req.params.id);
+});
+
+function getDate(date) {
+  let year = date.getFullYear();
+  let month = new String(date.getMonth() + 1);
+  let day = new String(date.getDate());
+  if (month.length == 1) {
+    month = "0" + month;
+  }
+  if (day.length == 1) {
+    day = "0" + day;
+  }
+  return year + "-" + month + "-" + day;
+}
+
+router.get("/graph", async (req, res, next) => {
+  var api_url = "https://openapi.naver.com/v1/datalab/search";
+  let now = new Date();
+  let endDate = getDate(now);
+  let startDate = now.getFullYear() + "-01-01";
+
+  const response = await axios.post(
+    api_url,
+    {
+      startDate: startDate,
+      endDate: endDate,
+      timeUnit: "month",
+      keywordGroups: [
+        {
+          groupName: "코로나",
+          keywords: ["코로나"],
+        },
+      ],
+    },
+    {
+      headers: {
+        "X-Naver-Client-Id": CLIENT_ID2,
+        "X-Naver-Client-Secret": CLIENT_SECRET2,
+      },
+    }
+  );
+  const data = response.data;
+  res.json(data.results[0]);
 });
 
 module.exports = router;

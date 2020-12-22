@@ -1,0 +1,23 @@
+{% extends 'layout.html' %} {% block content %}
+<div class="movie">
+  <form style="margin-bottom: 3rem">
+    <div class="control-wrapper">
+      <img
+        readonly
+        class="movie-img"
+        id="image"
+        name="image"
+        src="{{
+      movieItem.image }}"
+      />
+      <div class="flex-col movie-info">
+        <label for="title">제목 : {{ movieItem.title }}</label>
+        <label for="director">감독 : {{ movieItem.director }}</label>
+        <label for="actor">배우 : {{ movieItem.actor }}</label>
+        <label for="userRating">평점 : {{ movieItem.userRating }}</label>
+      </div>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

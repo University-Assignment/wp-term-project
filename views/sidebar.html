@@ -1,4 +1,4 @@
-<div class="login">
+<div class="sidebar">
   <form class="login-form" method="post" action="/login">
     {%if isAuthenticated %}
     <h3 style="padding-bottom: 1rem">{{user.name}}님 환영합니다.</h3>
@@ -33,6 +33,14 @@
       <input id="login" name="login_submit" type="submit" value="로그인" />
     </div>
     {% endif %}
+  </form>
+  <form class="info-form">
+    <div class="info-wrapper">
+      <label for="username"><h3>회원 수 : {{ count.account }}</h3></label>
+    </div>
+    <div class="info-wrapper">
+      <label for="username"><h3>게시글 수 : {{ count.post }}</h3></label>
+    </div>
   </form>
 </div>
 

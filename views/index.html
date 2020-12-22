@@ -62,5 +62,39 @@
       </tbody>
     </table>
   </board>
+
+  <movie>
+    <h2 class="title">영화 랭킹</h2>
+    <table frame="void" width="80px" class="board-table">
+      <colgroup>
+        <col width="40px" />
+        <col width="40px" />
+      </colgroup>
+      <thead>
+        <tr>
+          <th scope="col">제목</th>
+          <th scope="col">개봉일자</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for BoxOffice in dailyBoxOfficeList %}
+        <tr>
+          <td style="text-align: center">
+            <a href="/movie/{{BoxOffice.movieNm}}">{{BoxOffice.movieNm}}</a>
+          </td>
+          <td style="text-align: center">{{BoxOffice.openDt}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </movie>
+  <graph><div id="curve_chart" style="height: 90%"></div></graph>
 </div>
+{% endblock %} {% block scripts %}
+<script
+  type="text/javascript"
+  src="https://www.gstatic.com/charts/loader.js"
+></script>
+<script src="/public/js/index.js"></script>
 {% endblock %}

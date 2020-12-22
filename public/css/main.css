@@ -81,7 +81,7 @@ a {
   height: 100%;
 }
 
-.login {
+.sidebar {
   margin: auto auto;
 }
 
@@ -114,6 +114,17 @@ form [type="submit"],
   padding: 0.5em 1em;
 }
 
+.info-wrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1em;
+}
+
+.info-wrapper > label {
+  flex-grow: 0;
+  padding: 0.1rem;
+}
+
 .title {
   text-align: center;
 }
@@ -144,7 +155,6 @@ form [type="submit"],
 
 .flex-col {
   display: flex;
-  align-items: center;
   justify-content: center;
   flex-direction: column;
   height: 100%;
@@ -193,7 +203,7 @@ form [type="submit"],
 .index {
   display: grid;
   grid-template-columns: repeat(5, 0.2fr);
-  grid-template-rows: 0.5fr 0.5fr;
+  grid-template-rows: repeat(5, 0.2fr);
   height: 100%;
 }
 
@@ -201,12 +211,36 @@ form [type="submit"],
   grid-column-start: 3;
   grid-column-end: 6;
   grid-row-start: 1;
-  grid-row-end: 2;
+  grid-row-end: 32;
 }
 
 .index ranking {
   grid-column-start: 1;
   grid-column-end: 3;
   grid-row-start: 1;
-  grid-row-end: 2;
+  grid-row-end: 3;
+}
+
+.index movie {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  grid-row-start: 3;
+  grid-row-end: 6;
+}
+
+.index graph {
+  grid-column-start: 3;
+  grid-column-end: 6;
+  grid-row-start: 3;
+  grid-row-end: 6;
+}
+
+.movie-info {
+  margin-left: 1rem;
+}
+
+.movie {
+  height: 60%;
+  width: 40%;
+  padding: 0 30%;
 }

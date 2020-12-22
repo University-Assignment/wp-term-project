@@ -1,5 +1,7 @@
 const { Router } = require("express");
 const { requireAuthentication } = require("../middlewares/auth");
+const axios = require("axios");
+const { MOVIE_API_KEY, CLIENT_ID, CLIENT_SECRET } = require("../env");
 const {
   mongoose,
   models: { User, Post, Good },
@@ -61,10 +63,25 @@ router.get("/", async (req, res, next) => {
     { $sort: { postCount: -1 } },
   ]).exec();
 
+  req.session.count = { post: posts.length, account: accounts.length };
+
+  const response = await axios.get(
+    "http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json",
+    {
+      params: {
+        key: MOVIE_API_KEY,
+        targetDt: "20201220",
+      },
+    }
+  );
+  const dailyBoxOfficeList = response.data.boxOfficeResult.dailyBoxOfficeList;
+
   res.render("index", {
     title: "Simple Board",
     posts,
     accounts,
+    count: req.session.count,
+    dailyBoxOfficeList,
     errorMessage: req.flash("errorMessage"),
   });
 });
@@ -72,6 +89,7 @@ router.get("/", async (req, res, next) => {
 router.get("/join", (req, res, next) => {
   res.render("join", {
     title: "Simple Board",
+    count: req.session.count,
     errorMessage: req.flash("errorMessage"),
   });
 });
@@ -79,6 +97,7 @@ router.get("/join", (req, res, next) => {
 router.get("/login", (req, res, next) => {
   res.render("index", {
     title: "Simple Board",
+    count: req.session.count,
     errorMessage: req.flash("errorMessage"),
   });
 });
@@ -119,12 +138,14 @@ router.get("/board", async (req, res, next) => {
   ]).exec();
   res.render("board", {
     title: "Simple Board",
+    count: req.session.count,
     posts,
   });
 });
 
 router.get("/newpost", requireAuthentication, (req, res, next) => {
   res.render("post-new", {
+    count: req.session.count,
     title: "Simple Board",
   });
 });
@@ -149,6 +170,7 @@ router.get("/post/:id", requireAuthentication, async (req, res, next) => {
   res.render("post", {
     title: "Simple Board",
     post: post,
+    count: req.session.count,
     errorMessage: req.flash("errorMessage"),
   });
 });
@@ -157,7 +179,28 @@ router.get("/myinfo", requireAuthentication, async (req, res, next) => {
   const account = await User.findOne({ _id: req.session.user.id });
   res.render("myinfo", {
     title: "Simple Board",
+    count: req.session.count,
     account,
+  });
+});
+
+router.get("/movie/:name", requireAuthentication, async (req, res, next) => {
+  var api_url = "https://openapi.naver.com/v1/search/movie.json";
+  const response = await axios.get(api_url, {
+    headers: {
+      "X-Naver-Client-Id": CLIENT_ID,
+      "X-Naver-Client-Secret": CLIENT_SECRET,
+    },
+    params: {
+      query: req.params.name,
+    },
+  });
+  const movieItem = response.data.items[0];
+  movieItem.title = req.params.name;
+  res.render("movie", {
+    title: "Simple Board",
+    count: req.session.count,
+    movieItem,
   });
 });
 
