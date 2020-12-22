@@ -54,6 +54,7 @@ router.get("/", async (req, res, next) => {
     {
       $project: {
         name: 1,
+        username: 1,
         postCount: { $size: "$posts" },
       },
     },
