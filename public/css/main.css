@@ -244,3 +244,14 @@ form [type="submit"],
   width: 40%;
   padding: 0 30%;
 }
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  list-style: none;
+}
+
+.page-item {
+  padding: 0.5rem;
+}

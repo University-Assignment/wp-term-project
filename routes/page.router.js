@@ -42,6 +42,7 @@ router.get("/", async (req, res, next) => {
         goodCount: { $size: "$goods" },
       },
     },
+    { $limit: 5 },
   ]).exec();
 
   const accounts = await User.aggregate([
@@ -61,6 +62,7 @@ router.get("/", async (req, res, next) => {
       },
     },
     { $sort: { postCount: -1 } },
+    { $limit: 5 },
   ]).exec();
 
   req.session.count = { post: posts.length, account: accounts.length };
@@ -103,6 +105,17 @@ router.get("/login", (req, res, next) => {
 });
 
 router.get("/board", async (req, res, next) => {
+  let page = 1;
+  if (req.query.page) {
+    page = req.query.page * 1;
+  }
+  const limit = 7;
+
+  var skip = (page - 1) * limit;
+
+  let count = await Post.countDocuments();
+  let maxPage = Math.ceil(count / limit);
+
   const posts = await Post.aggregate([
     {
       $lookup: {
@@ -122,10 +135,13 @@ router.get("/board", async (req, res, next) => {
       },
     },
     { $sort: { createdAt: -1 } },
+    { $skip: skip },
+    { $limit: limit },
     {
       $project: {
         title: 1,
         author: {
+          username: 1,
           name: 1,
         },
         views: 1,
@@ -138,6 +154,8 @@ router.get("/board", async (req, res, next) => {
   ]).exec();
   res.render("board", {
     title: "Simple Board",
+    currentPage: page,
+    maxPage: maxPage,
     count: req.session.count,
     posts,
   });
